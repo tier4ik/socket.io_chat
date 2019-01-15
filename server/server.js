@@ -8,31 +8,23 @@ const app = express();
 const server = http.createServer(app);
 const port = process.env.PORT || 3000;
 
+var msgGenerator = require('./utils/msgGen').msgGenerator;
+
 const io = socketIo(server);
 
 app.use(express.static(publickPath));
 
 io.on('connection', (socket)=> {
     //
-    socket.broadcast.emit('newMsg', {
-        from: 'Admin',
-        text: 'Welcome our new user !'
-    });
-    socket.emit('newMsg', {
-        from: 'Admin',
-        text: 'Welcome in our wonderful chat !'
-    });
+    socket.broadcast.emit('newMsg', msgGenerator('Admin', 'Welcome our new user !'));
+    socket.emit('newMsg', msgGenerator('Admin', 'Welcome in our wonderful chat !'));
     //
     socket.on('createMsg', (msg)=> {
         let date = new Date();
         //благодаря emit можем создавать любые эвенты                
         //io.emit срабатывает для ВСЕХ подключенных пользователей
         //socket.emit для одного подключения
-        io.emit('newMsg', {
-            from: msg.from,
-            text: msg.text,
-            createdAt: `${date.getHours()} : ${date.getMinutes()}`
-        });
+        io.emit('newMsg', msgGenerator(msg.from, msg.text));
 
         //broadcast означает отослать событие всем, КРОМЕ ТОГО socket кто вызвал его
         // socket.broadcast.emit('newMsg', {
