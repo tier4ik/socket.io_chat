@@ -9,7 +9,17 @@
 <body>
     <p>Welcome to the chat app</p>
 
+    <ol id="msg__list">
+        
+    </ol>
+
+    <form id="msg__form">
+        <input type="text" name="message" id="msg__text" placeholder="Your message here">
+        <button>Send</button>
+    </form>
+
     <script src="/socket.io/socket.io.js"></script>
+    <script src="/libs/jquery.min.js"></script>
     <script src="/js/index.js"></script>
 </body>
 </html>

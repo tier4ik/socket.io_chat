@@ -19,13 +19,13 @@ io.on('connection', (socket)=> {
     socket.broadcast.emit('newMsg', msgGenerator('Admin', 'Welcome our new user !'));
     socket.emit('newMsg', msgGenerator('Admin', 'Welcome in our wonderful chat !'));
     //
-    socket.on('createMsg', (msg)=> {
+    socket.on('createMsg', (msg, callback)=> {
         let date = new Date();
         //благодаря emit можем создавать любые эвенты                
         //io.emit срабатывает для ВСЕХ подключенных пользователей
         //socket.emit для одного подключения
         io.emit('newMsg', msgGenerator(msg.from, msg.text));
-
+        callback('This is from the server');
         //broadcast означает отослать событие всем, КРОМЕ ТОГО socket кто вызвал его
         // socket.broadcast.emit('newMsg', {
         //     from: msg.from,
