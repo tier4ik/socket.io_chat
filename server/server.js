@@ -13,8 +13,16 @@ const io = socketIo(server);
 app.use(express.static(publickPath));
 
 io.on('connection', (socket)=> {
-    console.log('New user connected');
-    
+    //
+    socket.broadcast.emit('newMsg', {
+        from: 'Admin',
+        text: 'Welcome our new user !'
+    });
+    socket.emit('newMsg', {
+        from: 'Admin',
+        text: 'Welcome in our wonderful chat !'
+    });
+    //
     socket.on('createMsg', (msg)=> {
         let date = new Date();
         //благодаря emit можем создавать любые эвенты                
@@ -25,6 +33,13 @@ io.on('connection', (socket)=> {
             text: msg.text,
             createdAt: `${date.getHours()} : ${date.getMinutes()}`
         });
+
+        //broadcast означает отослать событие всем, КРОМЕ ТОГО socket кто вызвал его
+        // socket.broadcast.emit('newMsg', {
+        //     from: msg.from,
+        //     text: msg.text,
+        //     createdAt: `${date.getHours()}:${date.getMinutes()}`
+        // });
     });
 
     socket.on('disconnect', ()=> {
