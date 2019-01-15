@@ -14,16 +14,17 @@ app.use(express.static(publickPath));
 
 io.on('connection', (socket)=> {
     console.log('New user connected');
-    //благодаря emit можем создавать любые эвенты
-
-
+    
     socket.on('createMsg', (msg)=> {
-        console.log(msg);
         let date = new Date();
-        msg.createdAt = `${date.getHours()} : ${date.getMinutes()}`;
-                         
-        
-        socket.emit('newMsg', msg);
+        //благодаря emit можем создавать любые эвенты                
+        //io.emit срабатывает для ВСЕХ подключенных пользователей
+        //socket.emit для одного подключения
+        io.emit('newMsg', {
+            from: msg.from,
+            text: msg.text,
+            createdAt: `${date.getHours()} : ${date.getMinutes()}`
+        });
     });
 
     socket.on('disconnect', ()=> {

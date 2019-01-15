@@ -2,10 +2,10 @@ var socket = io();
 
 socket.on('connect', function() {
     console.log('Connected to server');
-    socket.emit('createMsg', {
-        from: 'Max',
-        text: 'Simply text from message'
-    });
+    // socket.emit('createMsg', {
+    //     from: 'Max',
+    //     text: 'Simply text from message'
+    // });
 });
 
 socket.on('newMsg', function(msg) {
