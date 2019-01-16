@@ -9,6 +9,7 @@ const server = http.createServer(app);
 const port = process.env.PORT || 3000;
 
 var msgGenerator = require('./utils/msgGen').msgGenerator;
+var locationGenerator = require('./utils/msgGen').locationGenerator;
 
 const io = socketIo(server);
 
@@ -32,6 +33,10 @@ io.on('connection', (socket)=> {
         //     text: msg.text,
         //     createdAt: `${date.getHours()}:${date.getMinutes()}`
         // });
+    });
+
+    socket.on('createLocationMsg', (coords)=> {
+        io.emit('newLocationMsg', locationGenerator('Admin', coords.latitude, coords.longitude));
     });
 
     socket.on('disconnect', ()=> {
