@@ -12,7 +12,7 @@ socket.on('newMsg', function(msg) {
     console.log('New message is ', msg);
     var li = $('<li></li>');
     li.text(msg.from + ': ' + msg.text);
-    $('#msg__list').append(li);
+    $('#chat__list').append(li);
 });
 
 socket.on('disconnect', function() {
@@ -22,13 +22,18 @@ socket.on('disconnect', function() {
 $('#msg__form').on('submit', function(evt) {
     evt.preventDefault();
 
+    let text = $('#msg__text').val();
+
+    if(!text) {
+        return false;
+    }
+
     socket.emit('createMsg', {
         from: 'User',
-        text: $('#msg__text').val()
+        text: text
     }, function() {
-
+        $('#msg__text').val('');
     });
-    $('#msg__text').val('');
 });
 
 var locBtn = $('#send-location');
@@ -54,7 +59,8 @@ socket.on('newLocationMsg', function(msg) {
     a.attr('href', msg.link);
     a.text('Click to see you current location');
 
+    li.text(`${msg.from}: `);
     li.append(a);
-    $('#msg__list').append(li);
+    $('#chat__list').append(li);
 });
 

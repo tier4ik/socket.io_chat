@@ -26,7 +26,7 @@ io.on('connection', (socket)=> {
         //io.emit срабатывает для ВСЕХ подключенных пользователей
         //socket.emit для одного подключения
         io.emit('newMsg', msgGenerator(msg.from, msg.text));
-        callback('This is from the server');
+        callback();
         //broadcast означает отослать событие всем, КРОМЕ ТОГО socket кто вызвал его
         // socket.broadcast.emit('newMsg', {
         //     from: msg.from,
