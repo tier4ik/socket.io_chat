@@ -49,7 +49,7 @@ button {
     padding: 4px;
     border-radius: 2px;
 }
-p {
+.chat__welcome, .chat__users {
     font-size: 24px;
     padding: 4px;
     margin-bottom: 20px;
@@ -65,4 +65,16 @@ p {
 #chat__list>li:first-child {
     font-size: 18px;
     font-weight: bold;
+}
+.message {
+    margin-bottom: 20px;
+}
+.message__title>h4 {
+    display: inline-block;
+    padding-bottom: 4px;
+}
+.message__title>span {
+    padding-left: 10px;
+    color: #777;
+    font-size: 12px;
 }
