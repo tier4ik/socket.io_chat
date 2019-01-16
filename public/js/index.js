@@ -9,9 +9,11 @@ socket.on('connect', function() {
 });
 
 socket.on('newMsg', function(msg) {
+    var formattedTime = moment(msg.createdAt).format('h:mm a');
+
     console.log('New message is ', msg);
     var li = $('<li></li>');
-    li.text(msg.from + ': ' + msg.text);
+    li.text(msg.from + ' ' + formattedTime + ': ' + msg.text);
     $('#chat__list').append(li);
 });
 
@@ -53,13 +55,15 @@ locBtn.on('click', function(evt) {
 });
 
 socket.on('newLocationMsg', function(msg) {
+    var formattedTime = moment(msg.createdAt).format('h:mm a');
+
     var li = $('<li></li>');
     var a = $('<a></a>');
 
     a.attr('href', msg.link);
     a.text('Click to see you current location');
 
-    li.text(`${msg.from}: `);
+    li.text(msg.from + ' ' + formattedTime + ':');
     li.append(a);
     $('#chat__list').append(li);
 });
