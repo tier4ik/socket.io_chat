@@ -48,15 +48,25 @@ io.on('connection', (socket)=> {
     //
     socket.on('createMsg', (msg, callback)=> {
         let date = new Date();
-        //благодаря emit можем создавать любые эвенты                
-        //io.emit срабатывает для ВСЕХ подключенных пользователей
-        //socket.emit для одного подключения
-        io.emit('newMsg', msgGenerator(msg.from, msg.text));
-        callback();
+        var user = users.getUser(socket.id);
+        if(user && isRealString(msg.text)) {
+            //благодаря emit можем создавать любые эвенты                
+            //io.emit срабатывает для ВСЕХ подключенных пользователей
+            //socket.emit для одного подключения
+            io.to(user.room).emit('newMsg', msgGenerator(user.name, msg.text));
+            callback();
+        }else{
+            return false;
+        }
      });
 
     socket.on('createLocationMsg', (coords)=> {
-        io.emit('newLocationMsg', locationGenerator('Admin', coords.latitude, coords.longitude));
+        var user = users.getUser(socket.id);
+        if(user) {
+            io.to(user.room).emit('newLocationMsg', locationGenerator(user.name, coords.latitude, coords.longitude));
+        }else{
+            return false;
+        }
     });
 
     socket.on('disconnect', ()=> {
