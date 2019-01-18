@@ -2,10 +2,17 @@ var socket = io();
 
 socket.on('connect', function() {
     console.log('Connected to server');
-    // socket.emit('createMsg', {
-    //     from: 'Max',
-    //     text: 'Simply text from message'
-    // });
+    //При подключении к серверу 
+    var params = $.deparam(window.location.search);
+    socket.emit('join', params, function(err) {
+        if (err) {
+            alert(err);
+            //если колбэк с ошибкой вернем пользователя на страницу логина
+            window.location.href = '/';
+        }else{
+            console.log('no errors');
+        }
+    });
 });
 
 socket.on('newMsg', function(msg) {
@@ -36,9 +43,18 @@ socket.on('disconnect', function() {
     console.log('Disonnected from server');
 });
 
+socket.on('updateUserList', function(users) {
+    var ol = $('<ol></ol>');
+
+    users.forEach(function(user) {
+        ol.append($('<li></li>').text(user));
+    });
+    $('#chat__users-list').html(ol);
+});
+
 $('#msg__form').on('submit', function(evt) {
     evt.preventDefault();
-
+    var params = $.deparam(window.location.search);
     let text = $('#msg__text').val();
 
     if(!text) {
@@ -46,7 +62,7 @@ $('#msg__form').on('submit', function(evt) {
     }
 
     socket.emit('createMsg', {
-        from: 'User',
+        from: params.name,
         text: text
     }, function() {
         $('#msg__text').val('');
